@@ -76,4 +76,5 @@ public class EntityGlowManager {
     }
 
     private record EntityGlowContext(String teamName, int taskId) {}
+
 }
