@@ -7,7 +7,7 @@
 
     <groupId>nico.dev</groupId>
     <artifactId>PacketGlowAPI</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <packaging>jar</packaging>
 
     <name>PacketGlowAPI</name>
@@ -61,11 +61,10 @@
         </repository>
     </repositories>
 
-    <!-- 🔥 Aquí defines tu destino de publicación -->
     <distributionManagement>
         <repository>
             <id>github</id>
-            <name>GitHub NicoHaxz PacketGlowAPI</name>
+            <name>GitHub Packages - PacketGlowAPI</name>
             <url>https://maven.pkg.github.com/NicoHaxz/PacketGlowAPI</url>
         </repository>
     </distributionManagement>
@@ -82,6 +81,20 @@
             <groupId>net.dmulloy2</groupId>
             <artifactId>ProtocolLib</artifactId>
             <version>5.4.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot</artifactId>
+            <version>1.21.4-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.purpurmc.purpur</groupId>
+            <artifactId>purpur-api</artifactId>
+            <version>1.21-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
