@@ -28,11 +28,24 @@ Ya que usamos el sistema de scoreboard vanilla y no un sistema con packets, pron
 ## 🛠️ Instalación / Dependencia
 
 Maven (pom.xml)
-<repositories> <repository> <id>github</id> <url>https://maven.pkg.github.com/NicoHaxz/PacketGlowAPI</url> </repository> </repositories> <dependencies> <dependency> <groupId>io.github.nicohaxz</groupId> <artifactId>packetglowapi</artifactId> <version>1.0.8</version> </dependency> </dependencies> ```
-
+```xml
+<repositories> 
+    <repository> 
+        <id>github</id> 
+        <url>https://maven.pkg.github.com/NicoHaxz/PacketGlowAPI</url> 
+    </repository> 
+    </repositories> 
+    <dependencies> 
+        <dependency> 
+            <groupId>io.github.nicohaxz</groupId>
+            <artifactId>packetglowapi</artifactId> 
+            <version>1.0.8</version>
+            </dependency>
+        </dependencies> 
+```
 ## Gradle (Groovy DSL)
 
-```
+```xml
 repositories {
     mavenCentral()
     maven { url = uri("https://maven.pkg.github.com/NicoHaxz/PacketGlowAPI") }
@@ -43,7 +56,7 @@ dependencies {
 }
 ```
 ## Gradle (Kotlin DSL)
-```
+```xml
 repositories {
     mavenCentral()
     maven { url = uri("https://maven.pkg.github.com/NicoHaxz/PacketGlowAPI") }
@@ -56,7 +69,7 @@ dependencies {
 ## 🚀 Inicialización
 En tu plugin principal:
 
-```
+```java
 @Override
 public void onEnable() {
     GlowAPI.initialize(); // Inicializar la API
@@ -70,7 +83,7 @@ public void onDisable() {
 ## 💡 Ejemplos de uso
 Hacer que un jugador brille en rojo por 10 segundos:
 
-```
+```java
 GlowAPI.setCustomPlayerGlow(player, org.bukkit.ChatColor.RED, 200);
 Hacer que una entidad brille en verde para todos:
 
@@ -80,7 +93,7 @@ Hacer que una entidad brille azul por 5 segundos:
 GlowAPI.setCustomEntityGlow(entity, org.bukkit.ChatColor.BLUE, 100);
 Aplicar glow a un jugador al entrar al servidor por 30 segundos:
 ```
-```
+```java
 @EventHandler
 public void onJoin(PlayerJoinEvent event) {
     Player player = event.getPlayer();
@@ -130,7 +143,7 @@ Currently, it uses the vanilla scoreboard system and not a packet-based system; 
 ###🛠️ Installation / Dependency
 Maven (pom.xml)
 
-```
+```xml
 <repositories>
   <repository>
     <id>github</id>
@@ -148,7 +161,7 @@ Maven (pom.xml)
 ```
 ### Gradle (Groovy DSL)
 
-```
+```xml
 repositories {
     mavenCentral()
     maven { url = uri("https://maven.pkg.github.com/NicoHaxz/PacketGlowAPI") }
@@ -160,7 +173,7 @@ dependencies {
 ```
 ### Gradle (Kotlin DSL)
 
-```
+```xml
 repositories {
     mavenCentral()
     maven { url = uri("https://maven.pkg.github.com/NicoHaxz/PacketGlowAPI") }
@@ -173,7 +186,7 @@ dependencies {
 ###🚀 Initialization
 In your main plugin class:
 
-```
+```java
 @Override
 public void onEnable() {
     GlowAPI.initialize();
@@ -187,7 +200,7 @@ public void onDisable() {
 ###💡 Usage Examples
 Make a player glow red for 10 seconds:
 
-```
+```java
 GlowAPI.setCustomPlayerGlow(player, org.bukkit.ChatColor.RED, 200);
 Make an entity glow green for all players:
 
@@ -199,7 +212,7 @@ Give players green glow for 30 seconds on join:
 
 ```
 
-```
+```java
 @EventHandler
 public void onJoin(PlayerJoinEvent event) {
     Player player = event.getPlayer();
