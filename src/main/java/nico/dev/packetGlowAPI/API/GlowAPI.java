@@ -10,21 +10,18 @@ public class GlowAPI {
 
     private GlowAPI() {}
 
-    /** Inicializar la API (llamar desde tu plugin principal en onEnable). */
     public static void initialize() {
         if (manager == null) manager = new GlowManager();
     }
 
-    /** Desinicializar (onDisable). */
     public static void shutdown() {
         manager = null;
     }
 
     private static void requireInit() {
-        if (manager == null) throw new IllegalStateException("SpectralGlow API no inicializada. Llama a GlowAPI.initialize() desde tu plugin.");
+        if (manager == null) throw new IllegalStateException("GlowAPI no inicializada. Llama a GlowAPI.initialize() desde tu plugin.");
     }
 
-    // API pública:
     public static void setGlowing(Entity entity, Player viewer, GlowColor color, boolean enable) {
         requireInit();
         if (viewer == null) manager.setGlowingForAll(entity, color, enable);

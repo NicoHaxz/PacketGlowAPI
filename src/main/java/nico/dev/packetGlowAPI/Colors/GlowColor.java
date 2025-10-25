@@ -18,6 +18,6 @@ public enum GlowColor {
     LIGHT_PURPLE(13),
     YELLOW(14);
 
-        public final int value;
-        GlowColor(int value) { this.value = value; }
+    public final int value;
+    GlowColor(int value) { this.value = value; }
 }
