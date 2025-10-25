@@ -13,11 +13,13 @@ public final class main extends JavaPlugin {
     public void onEnable() {
         instance = this;
         glowManager = new GlowManager();
+        GlowAPI.initialize();
         getLogger().info("SpectralGlowAPI habilitada correctamente!");
     }
 
     @Override
     public void onDisable() {
+        GlowAPI.shutdown();
         getLogger().info("SpectralGlowAPI deshabilitada.");
     }
 

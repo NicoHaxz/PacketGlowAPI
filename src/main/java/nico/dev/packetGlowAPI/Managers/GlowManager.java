@@ -8,6 +8,8 @@ import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import com.comphenix.protocol.wrappers.WrappedWatchableObject;
 import nico.dev.packetGlowAPI.Colors.GlowColor;
 import org.bukkit.Bukkit;
+import org.bukkit.craftbukkit.v1_21_R3.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_21_R3.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -15,14 +17,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
-/**
- * Clase interna que maneja la lógica de envío de paquetes (teams + metadata)
- * para que entidades brillen con color para viewers específicos.
- *
- * Notas:
- * - Usa equipos 'fake' por color. En vanilla el color del outline depende del equipo en el cliente.
- * - Para que solo ciertos jugadores lo vean, enviamos los paquetes únicamente a esos viewers.
- */
+
 public class GlowManager {
     private final ProtocolManager protocol;
     private final Map<GlowColor, TeamData> teams = new EnumMap<>(GlowColor.class);
@@ -48,19 +43,24 @@ public class GlowManager {
                 new TeamData("sg_team_" + c.name() + "_" + teamCounter.getAndIncrement(), c));
     }
 
-    private void sendTeamPacket(Player viewer, TeamData team, int mode, Collection<String> players) {
+    private void sendTeamPacket(Player viewer, TeamData team, int mode, Collection<String> entries) {
         try {
             PacketContainer packet = new PacketContainer(PacketType.Play.Server.SCOREBOARD_TEAM);
+
             packet.getStrings().write(0, team.name);
             packet.getStrings().write(1, team.name);
             packet.getChatComponents().writeSafely(0, null);
             packet.getChatComponents().writeSafely(1, null);
+
             packet.getIntegers().writeSafely(0, 0);
             packet.getIntegers().writeSafely(1, team.color.value);
             packet.getIntegers().writeSafely(2, mode);
 
-            if (players == null) players = Collections.emptyList();
-            packet.getSpecificModifier(Collection.class).write(0, new ArrayList<>(players));
+            packet.getStrings().write(2, "never");
+            packet.getStrings().write(3, "never");
+
+            if (entries == null) entries = Collections.emptyList();
+            packet.getSpecificModifier(Collection.class).write(0, new ArrayList<>(entries));
 
             protocol.sendServerPacket(viewer, packet);
         } catch (Exception e) {
@@ -68,22 +68,12 @@ public class GlowManager {
         }
     }
 
-    private void sendGlowingMetadata(Entity entity, Player viewer, GlowColor color, boolean glowing) {
+    private void sendGlowFlag(Entity entity, Player viewer, boolean glowing) {
         try {
-            WrappedDataWatcher watcher = WrappedDataWatcher.getEntityWatcher(entity);
-
-            WrappedDataWatcher.WrappedDataWatcherObject flags = watcher.getWatchableObject(0).getWatcherObject();
-            byte original = watcher.getByte(flags.getIndex());
-            byte newFlags = (byte) (glowing ? (original | 0x40) : (original & ~0x40));
-            watcher.setObject(flags, newFlags);
-
-            WrappedDataWatcher.WrappedDataWatcherObject colorObj = watcher.getWatchableObject(1).getWatcherObject();
-            watcher.setObject(colorObj, (byte) color.value);
-
             PacketContainer packet = new PacketContainer(PacketType.Play.Server.ENTITY_METADATA);
             packet.getIntegers().write(0, entity.getEntityId());
-            packet.getWatchableCollectionModifier().write(0, watcher.getWatchableObjects());
-
+            byte flag = (byte) (glowing ? 0x40 : 0x00);
+            packet.getWatchableCollectionModifier().write(0, (List<WrappedWatchableObject>) Map.of(0, flag));
             protocol.sendServerPacket(viewer, packet);
         } catch (Exception e) {
             e.printStackTrace();
@@ -91,26 +81,16 @@ public class GlowManager {
     }
 
     public void setGlowing(Entity entity, Collection<Player> viewers, GlowColor color, boolean enable) {
-        Collection<Player> target = (viewers == null)
-                ? new ArrayList<>(Bukkit.getOnlinePlayers())
-                : viewers;
-
+        Collection<Player> target = viewers == null ? (Collection<Player>) Bukkit.getOnlinePlayers() : viewers;
         String entry = entity.getUniqueId().toString();
 
-        if (enable) {
-            TeamData t = getOrCreateTeam(color);
-            t.members.add(entity.getUniqueId());
-
-            for (Player v : target) {
-                sendTeamPacket(v, t, 0, Collections.singletonList(entry));
-                sendGlowingMetadata(entity, v, color, true);
-            }
-        } else {
-            for (Player v : target) {
-                for (TeamData t : teams.values()) {
-                    sendTeamPacket(v, t, 4, Collections.singletonList(entry));
-                }
-                sendGlowingMetadata(entity, v, color, false);
+        for (Player v : target) {
+            if (color == GlowColor.WHITE) {
+                sendGlowFlag(entity, v, enable);
+            } else {
+                TeamData t = getOrCreateTeam(color);
+                if (enable) t.members.add(entity.getUniqueId());
+                sendTeamPacket(v, t, enable ? 0 : 4, Collections.singletonList(entry));
             }
         }
     }
