@@ -103,7 +103,7 @@ Esta API es para uso de programadores amateur, facilitando la implementación de
 
 Todos los métodos son estáticos, lo que la hace muy fácil de usar en cualquier parte de tu plugin.
 
-🌍 **PacketGlowAPI** - English Version
+# 🌍 **PacketGlowAPI** - English Version
 
 
 PacketGlowAPI is a lightweight API for Spigot/Paper 1.21.4 that allows applying Glow effects in custom colors without visible teams.
