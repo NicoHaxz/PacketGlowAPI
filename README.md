@@ -154,7 +154,6 @@ Add this to your `pom.xml`:
 </dependencies>
 ```
 
-> ⚠️ Make sure your `~/.m2/settings.xml` includes your **GitHub token** with `read:packages` permission.
 
 ---
 
