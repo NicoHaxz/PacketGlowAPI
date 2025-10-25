@@ -1,23 +1,36 @@
 # 🌈 PacketGlowAPI
 
-**PacketGlowAPI** es una API ligera para Spigot/Paper 1.21.4 que permite aplicar efectos de **Glow (brillo de entidad)** en colores personalizados **sin usar Teams**.  
-Está basada en **ProtocolLib**, lo que permite enviar paquetes directamente al cliente y mostrar brillos individuales o globales.
+PacketGlowAPI es una API ligera para Spigot/Paper 1.21.4 que permite aplicar efectos de **Glow (brillo de entidad)** en colores personalizados **sin usar teams visibles**.  
+Funciona mediante ProtocolLib, enviando paquetes directamente al cliente para mostrar brillos globales o personalizados por jugador.
 
-### ✨ Características
-- Soporta **todos los colores vanilla** (16 disponibles).
-- Permite mostrar el glow **solo a jugadores específicos** o a **todos**.
-- No usa equipos visibles, todo es client-side (solo el jugador ve el efecto).
-- API completamente estática, fácil de integrar con una sola línea.
-- Compatible con **Spigot**, **Paper**, **Purpur**, etc.
+---
 
-### 🧱 Ejemplo de uso
-```java
-import com.nico.glowapi.GlowAPI;
-import com.nico.glowapi.GlowColor;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Entity;
+## ✨ Características
 
-Entity entity = player.getTargetEntity(10);
-GlowAPI.setGlowing(entity, player, GlowColor.RED, true); // Solo ese jugador lo ve en rojo
-GlowAPI.setGlowing(entity, null, GlowColor.AQUA, true);  // Todos lo ven en aqua
-GlowAPI.setGlowing(entity, player, null, false);         // Quitar glow para ese jugador
+- Soporte para los **16 colores vanilla** de Minecraft.  
+- Mostrar el glow **solo a jugadores específicos** o a **todos**.  
+- No usa equipos visibles ni modifica el servidor: todo es client-side.  
+- Fácil de usar con llamadas estáticas.  
+- Compatible con Spigot, Paper, Purpur y derivados que soporten ProtocolLib.
+
+---
+
+## 🛠️ Instalación / Uso
+
+### Obtener la dependencia (GitHub Packages)
+
+```xml
+<repositories>
+  <repository>
+    <id>github</id>
+    <url>https://maven.pkg.github.com/NicoHaxz/PacketGlowAPI</url>
+  </repository>
+</repositories>
+
+<dependencies>
+  <dependency>
+    <groupId>nico.dev</groupId>
+    <artifactId>PacketGlowAPI</artifactId>
+    <version>1.0.0</version>
+  </dependency>
+</dependencies>
