@@ -48,16 +48,12 @@ public class GlowManager {
                 new TeamData("sg_team_" + c.name() + "_" + teamCounter.getAndIncrement(), c));
     }
 
-    /**
-     * Construye y envía un paquete SCOREBOARD_TEAM a un viewer.
-     */
     private void sendTeamPacket(Player viewer, TeamData team, int mode, Collection<String> players) {
         try {
             PacketContainer packet = new PacketContainer(PacketType.Play.Server.SCOREBOARD_TEAM);
             packet.getStrings().write(0, team.name); // team name
             packet.getStrings().write(1, team.name); // display name
 
-            // Evitamos campos problemáticos (prefix/suffix) -> nulls
             packet.getChatComponents().writeSafely(0, null);
             packet.getChatComponents().writeSafely(1, null);
 
@@ -66,7 +62,6 @@ public class GlowManager {
             packet.getIntegers().writeSafely(2, mode); // mode
 
             if (players == null) players = Collections.emptyList();
-            // Usamos getSpecificModifier(Collection.class) para compatibilidad 1.21.4
             packet.getSpecificModifier(Collection.class).write(0, new ArrayList<>(players));
 
             protocol.sendServerPacket(viewer, packet);
@@ -75,31 +70,28 @@ public class GlowManager {
         }
     }
 
-    /**
-     * Envía metadata de glowing a un viewer específico.
-     */
+
     private void sendGlowingMetadata(Entity entity, Player viewer, boolean glowing) {
         try {
-            PacketContainer meta = new PacketContainer(PacketType.Play.Server.ENTITY_METADATA);
-            meta.getIntegers().write(0, entity.getEntityId());
+            WrappedDataWatcher watcher = WrappedDataWatcher.getEntityWatcher(entity);
 
-            // bitmask 0x40 = glowing
-            byte flags = (byte) (glowing ? 0x40 : 0x00);
+            WrappedDataWatcher.WrappedDataWatcherObject flags = watcher.getWatchableObject(0).getWatcherObject();
 
-            WrappedWatchableObject wwo = new WrappedWatchableObject(0, flags);
-            List<WrappedWatchableObject> list = Collections.singletonList(wwo);
+            byte original = watcher.getByte(flags.getIndex());
+            byte newFlags = (byte) (glowing ? (original | 0x40) : (original & ~0x40));
 
-            meta.getWatchableCollectionModifier().write(0, list);
-            protocol.sendServerPacket(viewer, meta);
+            watcher.setObject(flags, newFlags);
+
+            PacketContainer packet = new PacketContainer(PacketType.Play.Server.ENTITY_METADATA);
+            packet.getIntegers().write(0, entity.getEntityId());
+            packet.getWatchableCollectionModifier().write(0, watcher.getWatchableObjects());
+
+            protocol.sendServerPacket(viewer, packet);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    /**
-     * Hace glow de 'entity' visible para 'viewers' en color 'color'.
-     * Si viewers == null -> envía a todos online.
-     */
     public void setGlowing(Entity entity, Collection<Player> viewers, GlowColor color, boolean enable) {
         Collection<Player> target = (viewers == null)
                 ? new ArrayList<>(Bukkit.getOnlinePlayers())
@@ -112,21 +104,19 @@ public class GlowManager {
             t.members.add(entity.getUniqueId());
 
             for (Player v : target) {
-                // Enviamos CREATE (mode 0) por seguridad
                 sendTeamPacket(v, t, 0, Collections.singletonList(entry));
                 sendGlowingMetadata(entity, v, true);
             }
         } else {
             for (Player v : target) {
                 for (TeamData t : teams.values()) {
-                    sendTeamPacket(v, t, 4, Collections.singletonList(entry)); // mode 4 = remove players
+                    sendTeamPacket(v, t, 4, Collections.singletonList(entry));
                 }
                 sendGlowingMetadata(entity, v, false);
             }
         }
     }
 
-    // Wrappers convenientes
     public void setGlowingForAll(Entity entity, GlowColor color, boolean enable) {
         setGlowing(entity, null, color, enable);
     }
@@ -135,9 +125,6 @@ public class GlowManager {
         setGlowing(entity, Collections.singleton(viewer), color, enable);
     }
 
-    /**
-     * Limpieza del cache interno (llamar cuando muere una entidad o se descarga).
-     */
     public void removeEntityFromCache(UUID uuid) {
         for (Iterator<TeamData> it = teams.values().iterator(); it.hasNext(); ) {
             TeamData t = it.next();
