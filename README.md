@@ -33,10 +33,10 @@ Agrega esto en tu `pom.xml`:
 
 <dependencies>
   <dependency>
-    <groupId>nico.dev</groupId>
-    <artifactId>PacketGlowAPI</artifactId>
-    <version>1.0.0</version>
-  </dependency>
+    <groupId>io.github.nicohaxz</groupId>
+    <artifactId>packetglowapi</artifactId>
+    <version>1.0.2</version>
+</dependency>
 </dependencies>
 ```
 # 📦 Agregar PacketGlowAPI con Gradle
@@ -184,10 +184,10 @@ Add this to your `pom.xml`:
 
 <dependencies>
   <dependency>
-    <groupId>nico.dev</groupId>
-    <artifactId>PacketGlowAPI</artifactId>
-    <version>1.0.0</version>
-  </dependency>
+    <groupId>io.github.nicohaxz</groupId>
+    <artifactId>packetglowapi</artifactId>
+    <version>1.0.2</version>
+</dependency>
 </dependencies>
 ```
 ## 🧩 Gradle Dependency
