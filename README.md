@@ -35,7 +35,7 @@ Agrega esto en tu `pom.xml`:
   <dependency>
     <groupId>io.github.nicohaxz</groupId>
     <artifactId>packetglowapi</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.5</version>
 </dependency>
 </dependencies>
 ```
@@ -57,7 +57,7 @@ repositories {
 }
 
 dependencies {
-    implementation("nico.dev:PacketGlowAPI:1.0.0")
+    implementation("nico.dev:PacketGlowAPI:1.0.5")
 }
 ```
 
@@ -74,7 +74,7 @@ repositories {
 }
 
 dependencies {
-    implementation("nico.dev:PacketGlowAPI:1.0.0")
+    implementation("nico.dev:PacketGlowAPI:1.0.5")
 }
 ```
 
@@ -186,7 +186,7 @@ Add this to your `pom.xml`:
   <dependency>
     <groupId>io.github.nicohaxz</groupId>
     <artifactId>packetglowapi</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.5</version>
 </dependency>
 </dependencies>
 ```
@@ -202,7 +202,7 @@ repositories {
 }
 
 dependencies {
-    implementation "nico.dev:PacketGlowAPI:1.0.0"
+    implementation "nico.dev:PacketGlowAPI:1.0.5"
 }
 ```
 
@@ -214,7 +214,7 @@ repositories {
 }
 
 dependencies {
-    implementation("nico.dev:PacketGlowAPI:1.0.0")
+    implementation("nico.dev:PacketGlowAPI:1.0.5")
 }
 ```
 
