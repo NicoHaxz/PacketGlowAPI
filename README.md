@@ -1,7 +1,7 @@
 # 🌈 PacketGlowAPI
 
 ![Maven Package](https://img.shields.io/badge/Maven-GitHub%20Packages-blue?logo=apache-maven)
-![Version](https://img.shields.io/badge/version-1.0.8-green)
+![Version](https://img.shields.io/badge/version-1.0.9-green)
 ![Minecraft](https://img.shields.io/badge/Minecraft-1.21.4+-yellow?logo=minecraft)
 
 **PacketGlowAPI** es una API ligera para **Spigot/Paper 1.21.4** que permite aplicar efectos de **Glow (brillo)** en colores personalizados **sin usar equipos visibles**.  
