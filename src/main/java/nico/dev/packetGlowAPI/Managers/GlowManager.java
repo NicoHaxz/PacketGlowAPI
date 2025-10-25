@@ -4,6 +4,8 @@ import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketContainer;
+import com.comphenix.protocol.wrappers.EnumWrappers;
+import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import com.comphenix.protocol.wrappers.WrappedWatchableObject;
 import nico.dev.packetGlowAPI.Colors.GlowColor;
@@ -39,14 +41,20 @@ public class GlowManager {
     }
 
     private TeamData getOrCreateTeam(GlowColor color) {
+
+
         return teams.computeIfAbsent(color, c ->
                 new TeamData("sg_team_" + c.name() + "_" + teamCounter.getAndIncrement(), c));
+
+
     }
 
 
     private void sendGlowFlag(Entity entity, Player viewer, GlowColor color, boolean glowing) {
         try {
-            PacketContainer packet = new PacketContainer(PacketContainer.Type.Play.Server.ENTITY_METADATA);
+
+
+            PacketContainer packet = protocol.createPacket(PacketType.Play.Server.ENTITY_METADATA);
             packet.getIntegers().write(0, entity.getEntityId());
 
             WrappedDataWatcher watcher = WrappedDataWatcher.getEntityWatcher(entity);
@@ -54,10 +62,9 @@ public class GlowManager {
             WrappedDataWatcher.WrappedDataWatcherObject flagObj = watcher.getWatchableObject(0).getWatcherObject();
             byte originalFlag = watcher.getByte(flagObj.getIndex());
             byte newFlag = (byte) (glowing ? (originalFlag | 0x40) : (originalFlag & ~0x40));
-            watcher.setObject(flagObj, newFlag);
+            WrappedDataWatcher watcher1 = WrappedDataWatcher.getEntityWatcher(entity);
+            watcher1.setObject(flagObj, newFlag);
 
-            WrappedDataWatcher.WrappedDataWatcherObject colorObj = watcher.getWatchableObject(1).getWatcherObject();
-            watcher.setObject(colorObj, (byte) color.value);
 
             packet.getWatchableCollectionModifier().write(0, watcher.getWatchableObjects());
             protocol.sendServerPacket(viewer, packet);
@@ -72,15 +79,16 @@ public class GlowManager {
      */
     private void sendTeamPacket(Player viewer, TeamData team, int mode, Collection<String> entries) {
         try {
-            PacketContainer packet = new PacketContainer(PacketContainer.fromPacket(PacketType.Play.Server.SCOREBOARD_TEAM).getType());
+            PacketContainer packet = protocol.createPacket(PacketType.Play.Server.SCOREBOARD_TEAM);
 
             packet.getStrings().write(0, team.name); // nombre del team
             packet.getStrings().write(1, team.name); // displayName
-            packet.getChatComponents().writeSafely(0, null);
-            packet.getChatComponents().writeSafely(1, null);
+            WrappedChatComponent empty = WrappedChatComponent.fromText(" ");
+            packet.getChatComponents().writeSafely(0, empty);
+            packet.getChatComponents().writeSafely(1, empty);
 
             packet.getIntegers().writeSafely(0, 0); // friendlyFlags
-            packet.getIntegers().writeSafely(1, team.color.value); // color
+            packet.getEnumModifier(EnumWrappers.ChatFormatting.class,2).writeSafely(0, toChatFormatting(team.color)) ;// color
             packet.getIntegers().writeSafely(2, mode); // 0=create,4=remove
 
             // Nunca mostrar en scoreboard/tab
@@ -95,7 +103,10 @@ public class GlowManager {
             e.printStackTrace();
         }
     }
+    private EnumWrappers.ChatFormatting toChatFormatting(GlowColor color) {
 
+        return EnumWrappers.ChatFormatting.valueOf(color.name());
+    }
     /**
      * Glow principal para una colección de jugadores
      */
