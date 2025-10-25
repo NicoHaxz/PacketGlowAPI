@@ -1,0 +1,4 @@
+name: PacketGlowAPI
+version: '1.0-SNAPSHOT'
+main: nico.dev.packetGlowAPI.PacketGlowAPI
+api-version: '1.21'
