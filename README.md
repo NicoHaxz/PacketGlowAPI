@@ -4,26 +4,28 @@
 ![Version](https://img.shields.io/badge/version-1.0.0-green)
 ![Minecraft](https://img.shields.io/badge/Minecraft-1.21.4+-yellow?logo=minecraft)
 
-**PacketGlowAPI** es una API ligera para **Spigot/Paper 1.21.4** que permite aplicar efectos de **Glow (brillo)** en colores personalizados **sin usar equipos visibles**.  
-Funciona mediante **ProtocolLib**, enviando paquetes directamente al cliente para mostrar brillos globales o individuales por jugador.
+PacketGlowAPI es una API ligera para **Spigot/Paper 1.21.4** que permite aplicar efectos de **Glow (brillo)** en colores personalizados **sin usar ProtocolLib ni teams visibles**.  
+Funciona directamente usando el sistema de **scoreboards internos y team client-side** de Minecraft para mostrar brillos a todos o a jugadores específicos.
 
 ---
 
-## ✨ Características
+✨ Características
 
-- 🎨 Soporte para los **16 colores vanilla** de Minecraft.  
-- 👁️ Mostrar el brillo solo a jugadores específicos o a todos.  
-- 🧠 Sin uso de teams ni scoreboard visibles (todo es *client-side*).  
-- ⚡ API simple y estática, fácil de integrar.  
-- 🧩 Compatible con **Spigot**, **Paper**, **Purpur** y forks que soporten **ProtocolLib**.  
+- Soporte para los 16 colores vanilla de Minecraft.
+- Aplicar glow a jugadores y entidades.
+- Mostrar glow por tiempo determinado.
+- Sin uso de ProtocolLib ni equipos visibles.
+- API simple y estática, fácil de integrar.
+- Compatible con **Spigot**, **Paper**, **Purpur** y forks modernos.
+- Fácil integración con Gradle y Maven.
 
 ---
 
-## 🛠️ Instalación / Dependencia
+🛠️ Instalación / Dependencia
 
-Agrega esto en tu `pom.xml`:
+Maven
+Agrega esto en tu pom.xml:
 
-```xml
 <repositories>
   <repository>
     <id>github</id>
@@ -36,55 +38,35 @@ Agrega esto en tu `pom.xml`:
     <groupId>io.github.nicohaxz</groupId>
     <artifactId>packetglowapi</artifactId>
     <version>1.0.5</version>
-</dependency>
+  </dependency>
 </dependencies>
-```
-# 📦 Agregar PacketGlowAPI con Gradle
 
-Puedes usar **PacketGlowAPI** tanto con **Maven** como con **Gradle**.  
-Aquí te explico cómo hacerlo para Gradle, usando los dos formatos más comunes: **Groovy DSL** (`build.gradle`) y **Kotlin DSL** (`build.gradle.kts`).
-
----
-
-## 🧩 Usando Gradle (Groovy DSL)
-
-```gradle
+Gradle (Groovy DSL)
 repositories {
     mavenCentral()
-    maven {
-        url = uri("https://maven.pkg.github.com/NicoHaxz/PacketGlowAPI")
-    }
+    maven { url = uri("https://maven.pkg.github.com/NicoHaxz/PacketGlowAPI") }
 }
 
 dependencies {
-    implementation("nico.dev:PacketGlowAPI:1.0.5")
+    implementation("io.github.nicohaxz:packetglowapi:1.0.5")
 }
-```
 
----
-
-## 🧠 Usando Gradle (Kotlin DSL)
-
-```kotlin
+Gradle (Kotlin DSL)
 repositories {
     mavenCentral()
-    maven {
-        url = uri("https://maven.pkg.github.com/NicoHaxz/PacketGlowAPI")
-    }
+    maven { url = uri("https://maven.pkg.github.com/NicoHaxz/PacketGlowAPI") }
 }
 
 dependencies {
-    implementation("nico.dev:PacketGlowAPI:1.0.5")
+    implementation("io.github.nicohaxz:packetglowapi:1.0.5")
 }
-```
 
 ---
 
-## 🚀 Inicialización
+🚀 Inicialización
 
 En tu plugin principal:
 
-```java
 @Override
 public void onEnable() {
     GlowAPI.initialize(); // Inicializar la API
@@ -94,137 +76,78 @@ public void onEnable() {
 public void onDisable() {
     GlowAPI.shutdown(); // Apagar la API
 }
-```
 
 ---
 
-## 💡 Ejemplos de uso
+💡 Ejemplos de uso
 
-### 1️⃣ Hacer que una entidad brille en color verde para todos
-```java
-GlowAPI.setGlowingForAll(entity, GlowColor.GREEN, true);
-```
+Hacer que un jugador brille en rojo por 10 segundos:
+GlowAPI.setCustomPlayerGlow(player, org.bukkit.ChatColor.RED, 200);
 
-### 2️⃣ Hacer que solo un jugador vea a otro con brillo rojo
-```java
-GlowAPI.setGlowing(targetEntity, viewerPlayer, GlowColor.RED, true);
-```
+Hacer que una entidad brille en verde para todos:
+GlowAPI.setCustomEntityGlow(entity, org.bukkit.ChatColor.GREEN);
 
-### 3️⃣ Mostrar brillo azul por 5 segundos
-```java
-GlowAPI.setGlowingForAll(entity, GlowColor.BLUE, true);
+Hacer que una entidad brille azul por 5 segundos:
+GlowAPI.setCustomEntityGlow(entity, org.bukkit.ChatColor.BLUE, 100);
 
-Bukkit.getScheduler().runTaskLater(plugin, () -> {
-    GlowAPI.setGlowingForAll(entity, GlowColor.BLUE, false);
-}, 20L * 5); // 5 segundos
-```
-
-### 4️⃣ Al entrar al servidor, aplicar glow verde por 30 segundos
-```java
+Aplicar glow a un jugador al entrar al servidor por 30 segundos:
 @EventHandler
 public void onJoin(PlayerJoinEvent event) {
     Player player = event.getPlayer();
-
-    GlowAPI.setGlowingForAll(player, GlowColor.GREEN, true);
-
-    Bukkit.getScheduler().runTaskLater(plugin, () -> {
-        GlowAPI.setGlowingForAll(player, GlowColor.GREEN, false);
-    }, 20L * 30);
+    GlowAPI.setCustomPlayerGlow(player, org.bukkit.ChatColor.GREEN, 600);
 }
-```
 
 ---
 
-## 📦 Requisitos
+📦 Requisitos
 
-- **Spigot / Paper / Purpur 1.21.4+**  
-- **ProtocolLib 5.4.0+**
-
----
-
-## 🧑‍💻 Autor
-
-Desarrollado por **NicoHaxz**  
-🌐 [github.com/NicoHaxz](https://github.com/NicoHaxz)
+- Spigot / Paper / Purpur 1.21.4+
+- No requiere ProtocolLib
 
 ---
 
-# 🌍 English Version
+🧑‍💻 Autor / Créditos
+
+Desarrollado por **NicoHaxz** y **xxditoxx27**  
+GitHub: https://github.com/NicoHaxz  
+GitHub: https://github.com/xxditoxx27
+
+---
+
+⚠️ Notas
+
+- Esta API es para uso de **programadores amateur**, facilitando la implementación de efectos glow sin preocuparse por teams ni scoreboards visibles.
+- Todos los métodos son **estáticos**, lo que la hace muy fácil de usar en cualquier parte de tu plugin.
+
+---
+
+# 🌍 PacketGlowAPI - English Version
 
 ![Maven Package](https://img.shields.io/badge/Maven-GitHub%20Packages-blue?logo=apache-maven)
 ![Version](https://img.shields.io/badge/version-1.0.0-green)
 ![Minecraft](https://img.shields.io/badge/Minecraft-1.21.4+-yellow?logo=minecraft)
 
-**PacketGlowAPI** is a lightweight API for **Spigot/Paper 1.21.4** that lets you apply **colored glow effects** to entities **without using visible teams**.  
-It works through **ProtocolLib**, sending packets directly to the client to show glowing effects per-player or globally.
+PacketGlowAPI is a lightweight API for **Spigot/Paper 1.21.4** that allows applying **Glow effects** in custom colors **without ProtocolLib or visible teams**.  
+It works directly using Minecraft’s internal scoreboard/team system to show glow to everyone or specific players.
 
 ---
 
-## ✨ Features
+✨ Features
 
-- 🎨 Supports all **16 vanilla glow colors**.  
-- 👁️ Show glow to specific players or globally.  
-- 🧠 No visible teams or scoreboard modifications (fully client-side).  
-- ⚡ Easy to use with static calls.  
-- 🧩 Compatible with **Spigot**, **Paper**, **Purpur**, and ProtocolLib-supported forks.
-
----
-
-## 🛠️ Installation / Dependency
-
-Add this to your `pom.xml`:
-
-```xml
-<repositories>
-  <repository>
-    <id>github</id>
-    <url>https://maven.pkg.github.com/NicoHaxz/PacketGlowAPI</url>
-  </repository>
-</repositories>
-
-<dependencies>
-  <dependency>
-    <groupId>io.github.nicohaxz</groupId>
-    <artifactId>packetglowapi</artifactId>
-    <version>1.0.5</version>
-</dependency>
-</dependencies>
-```
-## 🧩 Gradle Dependency
-
-If you use **Gradle** instead of Maven, you can also import **PacketGlowAPI** directly from **GitHub Packages**, since it’s a Maven-compatible repository.
-
-Add this to your `build.gradle`:
-
-```groovy
-repositories {
-    maven { url "https://maven.pkg.github.com/NicoHaxz/PacketGlowAPI" }
-}
-
-dependencies {
-    implementation "nico.dev:PacketGlowAPI:1.0.5"
-}
-```
-
-Or if you’re using the **Kotlin DSL (`build.gradle.kts`)**:
-
-```kotlin
-repositories {
-    maven("https://maven.pkg.github.com/NicoHaxz/PacketGlowAPI")
-}
-
-dependencies {
-    implementation("nico.dev:PacketGlowAPI:1.0.5")
-}
-```
+- Supports all 16 vanilla Minecraft glow colors.
+- Apply glow to players and entities.
+- Show glow for a set amount of time.
+- No ProtocolLib needed, no visible teams.
+- Easy-to-use static API.
+- Compatible with **Spigot**, **Paper**, **Purpur**, and modern forks.
+- Easy integration with Gradle and Maven.
 
 ---
 
-## 🚀 Initialization
+🚀 Initialization
 
 In your main plugin class:
 
-```java
 @Override
 public void onEnable() {
     GlowAPI.initialize();
@@ -234,55 +157,45 @@ public void onEnable() {
 public void onDisable() {
     GlowAPI.shutdown();
 }
-```
 
 ---
 
-## 💡 Usage Examples
+💡 Usage Examples
 
-### 1️⃣ Make an entity glow green for everyone
-```java
-GlowAPI.setGlowingForAll(entity, GlowColor.GREEN, true);
-```
+Make a player glow red for 10 seconds:
+GlowAPI.setCustomPlayerGlow(player, org.bukkit.ChatColor.RED, 200);
 
-### 2️⃣ Make only one player see another with red glow
-```java
-GlowAPI.setGlowing(targetEntity, viewerPlayer, GlowColor.RED, true);
-```
+Make an entity glow green for all players:
+GlowAPI.setCustomEntityGlow(entity, org.bukkit.ChatColor.GREEN);
 
-### 3️⃣ Make an entity glow blue for 5 seconds
-```java
-GlowAPI.setGlowingForAll(entity, GlowColor.BLUE, true);
+Make an entity glow blue for 5 seconds:
+GlowAPI.setCustomEntityGlow(entity, org.bukkit.ChatColor.BLUE, 100);
 
-Bukkit.getScheduler().runTaskLater(plugin, () -> {
-    GlowAPI.setGlowingForAll(entity, GlowColor.BLUE, false);
-}, 20L * 5);
-```
-
-### 4️⃣ Give players green glow for 30 seconds on join
-```java
+Give players green glow for 30 seconds on join:
 @EventHandler
 public void onJoin(PlayerJoinEvent event) {
     Player player = event.getPlayer();
-
-    GlowAPI.setGlowingForAll(player, GlowColor.GREEN, true);
-
-    Bukkit.getScheduler().runTaskLater(plugin, () -> {
-        GlowAPI.setGlowingForAll(player, GlowColor.GREEN, false);
-    }, 20L * 30);
+    GlowAPI.setCustomPlayerGlow(player, org.bukkit.ChatColor.GREEN, 600);
 }
-```
 
 ---
 
-## 📦 Requirements
+📦 Requirements
 
-- **Spigot / Paper / Purpur 1.21.4+**  
-- **ProtocolLib 5.4.0+**
+- Spigot / Paper / Purpur 1.21.4+
+- No ProtocolLib required
 
 ---
 
-## 🧑‍💻 Author
+🧑‍💻 Author / Credits
 
-Developed by **NicoHaxz**  
-🌐 [github.com/NicoHaxz](https://github.com/NicoHaxz)
+Developed by **NicoHaxz** and **xxditoxx27**  
+GitHub: https://github.com/NicoHaxz  
+GitHub: https://github.com/xxditoxx27
+
+---
+
+⚠️ Notes
+
+- This API is intended for **amateur programmers**, simplifying the implementation of glow effects without worrying about teams or visible scoreboards.
+- All methods are **static**, making it very easy to use anywhere in your plugin.
