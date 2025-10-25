@@ -29,19 +29,20 @@ Ya que usamos el sistema de scoreboard vanilla y no un sistema con packets, pron
 
 Maven (pom.xml)
 ```xml
-<repositories> 
-    <repository> 
-        <id>github</id> 
-        <url>https://maven.pkg.github.com/NicoHaxz/PacketGlowAPI</url> 
-    </repository> 
-    </repositories> 
-    <dependencies> 
-        <dependency> 
-            <groupId>io.github.nicohaxz</groupId>
-            <artifactId>packetglowapi</artifactId> 
-            <version>1.0.8</version>
-            </dependency>
-        </dependencies> 
+<repositories>
+  <repository>
+    <id>github</id>
+    <url>https://maven.pkg.github.com/NicoHaxz/PacketGlowAPI</url>
+  </repository>
+</repositories>
+
+<dependencies>
+  <dependency>
+    <groupId>io.github.nicohaxz</groupId>
+    <artifactId>packetglowapi</artifactId>
+    <version>1.0.8</version>
+  </dependency>
+</dependencies>
 ```
 ## Gradle (Groovy DSL)
 
