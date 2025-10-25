@@ -40,7 +40,6 @@ Agrega esto en tu `pom.xml`:
 </dependencies>
 ```
 
-> ⚠️ Asegúrate de tener configurado tu archivo `~/.m2/settings.xml` con tu **token de GitHub Packages** que tenga permiso `read:packages`.
 
 ---
 
