@@ -40,7 +40,7 @@ Maven (pom.xml)
   <dependency>
     <groupId>io.github.nicohaxz</groupId>
     <artifactId>packetglowapi</artifactId>
-    <version>1.0.8</version>
+    <version>1.0.9</version>
   </dependency>
 </dependencies>
 ```
@@ -53,7 +53,7 @@ repositories {
 }
 
 dependencies {
-    implementation("io.github.nicohaxz:packetglowapi:1.0.8")
+    implementation("io.github.nicohaxz:packetglowapi:1.0.9")
 }
 ```
 ## Gradle (Kotlin DSL)
@@ -64,7 +64,7 @@ repositories {
 }
 
 dependencies {
-    implementation("io.github.nicohaxz:packetglowapi:1.0.8")
+    implementation("io.github.nicohaxz:packetglowapi:1.0.9")
 }
 ```
 ## 💡 Ejemplos de uso
@@ -142,7 +142,7 @@ Maven (pom.xml)
   <dependency>
     <groupId>io.github.nicohaxz</groupId>
     <artifactId>packetglowapi</artifactId>
-    <version>1.0.8</version>
+    <version>1.0.9</version>
   </dependency>
 </dependencies>
 ```
@@ -155,7 +155,7 @@ repositories {
 }
 
 dependencies {
-    implementation("io.github.nicohaxz:packetglowapi:1.0.8")
+    implementation("io.github.nicohaxz:packetglowapi:1.0.9")
 }
 ```
 ## Gradle (Kotlin DSL)
@@ -167,7 +167,7 @@ repositories {
 }
 
 dependencies {
-    implementation("io.github.nicohaxz:packetglowapi:1.0.8")
+    implementation("io.github.nicohaxz:packetglowapi:1.0.9")
 }
 ```
 ## 💡 Usage Examples

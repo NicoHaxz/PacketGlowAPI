@@ -66,8 +66,8 @@
     <distributionManagement>
         <repository>
             <id>github</id>
-            <name>GitHub Packages - PacketGlowAPI</name>
-            <url>https://maven.pkg.github.com/NicoHaxz/PacketGlowAPI</url>
+            <name>GitHub Nicoswished Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/Nicoswished/PacketGlowAPI</url>
         </repository>
     </distributionManagement>
 
