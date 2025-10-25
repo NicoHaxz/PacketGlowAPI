@@ -18,28 +18,28 @@ public class PlayerGlowManager {
     private static final Map<UUID, GlowContext> activePlayerGlows = new HashMap<>();
     private static final Map<UUID, Scoreboard> mirroredBoards = new HashMap<>();
 
-    public static void applyPlayerGlow(Player player, ChatColor color, int ticks) {
+    public static void applyPlayerGlow(Player player, ChatColor glowColor, int ticks) {
         UUID uuid = player.getUniqueId();
         cancelPlayerGlow(uuid);
 
         String glowTeamName = buildGlowTeamName(uuid);
+
         configureTeam(glowTeamName, team -> {
             Team originalTeam = mainScoreboard.getTeam(player.getName());
             if (originalTeam != null) copyTeamSettings(originalTeam, team);
-            team.setColor(color);
+            team.setColor(glowColor);
         });
 
         addEntryToTeam(glowTeamName, player.getName());
-
         player.setGlowing(true);
         ensureBoardRegistration(player);
 
-        GlowContext context = new GlowContext(player.getName(), glowTeamName, color);
+        GlowContext context = new GlowContext(player.getName(), glowTeamName, glowColor);
         activePlayerGlows.put(uuid, context);
 
         if (ticks > 0) {
             int taskId = Bukkit.getScheduler().runTaskLater(main.getInstance(),
-                    () -> finishPlayerGlow(player.getUniqueId()), ticks).getTaskId();
+                    () -> finishPlayerGlow(uuid), ticks).getTaskId();
             context.setTaskId(taskId);
         }
     }
@@ -57,13 +57,12 @@ public class PlayerGlowManager {
 
     private static void cancelPlayerGlow(UUID uuid) {
         GlowContext context = activePlayerGlows.get(uuid);
-        if (context == null) return;
-
-        if (context.getTaskId() >= 0) {
-            Bukkit.getScheduler().cancelTask(context.getTaskId());
+        if (context != null) {
+            if (context.getTaskId() >= 0) {
+                Bukkit.getScheduler().cancelTask(context.getTaskId());
+            }
+            finishPlayerGlow(uuid);
         }
-
-        finishPlayerGlow(uuid);
     }
 
     private static void configureTeam(String teamName, java.util.function.Consumer<Team> consumer) {
@@ -88,14 +87,16 @@ public class PlayerGlowManager {
         if (team != null && team.getEntries().isEmpty()) {
             try {
                 team.unregister();
-            } catch (IllegalStateException ignored) {}
+            } catch (IllegalStateException ignored) {
+            }
         }
     }
 
     private static void ensureBoardRegistration(Player player) {
         Scoreboard current = player.getScoreboard();
-        if (current == null || current == mainScoreboard) return;
-        mirroredBoards.put(player.getUniqueId(), current);
+        if (current != null && current != mainScoreboard) {
+            mirroredBoards.put(player.getUniqueId(), current);
+        }
     }
 
     private static String buildGlowTeamName(UUID uuid) {
@@ -107,7 +108,6 @@ public class PlayerGlowManager {
     private static void copyTeamSettings(Team source, Team target) {
         target.setPrefix(source.getPrefix());
         target.setSuffix(source.getSuffix());
-        target.setColor(source.getColor());
         target.setAllowFriendlyFire(source.allowFriendlyFire());
         target.setCanSeeFriendlyInvisibles(source.canSeeFriendlyInvisibles());
         for (Team.Option option : Team.Option.values()) {
@@ -116,14 +116,10 @@ public class PlayerGlowManager {
 
         Set<String> sourceEntries = new HashSet<>(source.getEntries());
         for (String entry : new HashSet<>(target.getEntries())) {
-            if (!sourceEntries.contains(entry)) {
-                target.removeEntry(entry);
-            }
+            if (!sourceEntries.contains(entry)) target.removeEntry(entry);
         }
         for (String entry : sourceEntries) {
-            if (!target.hasEntry(entry)) {
-                target.addEntry(entry);
-            }
+            if (!target.hasEntry(entry)) target.addEntry(entry);
         }
     }
 }
