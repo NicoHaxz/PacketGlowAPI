@@ -46,7 +46,7 @@ Maven (pom.xml)
 ```
 ## Gradle (Groovy DSL)
 
-```xml
+```gradle
 repositories {
     mavenCentral()
     maven { url = uri("https://maven.pkg.github.com/NicoHaxz/PacketGlowAPI") }
@@ -57,7 +57,7 @@ dependencies {
 }
 ```
 ## Gradle (Kotlin DSL)
-```xml
+```gradle
 repositories {
     mavenCentral()
     maven { url = uri("https://maven.pkg.github.com/NicoHaxz/PacketGlowAPI") }
@@ -65,20 +65,6 @@ repositories {
 
 dependencies {
     implementation("io.github.nicohaxz:packetglowapi:1.0.8")
-}
-```
-## 🚀 Inicialización
-En tu plugin principal:
-
-```java
-@Override
-public void onEnable() {
-    GlowAPI.initialize(); // Inicializar la API
-}
-
-@Override
-public void onDisable() {
-    GlowAPI.shutdown(); // Apagar la API
 }
 ```
 ## 💡 Ejemplos de uso
@@ -136,12 +122,12 @@ It works directly using Minecraft’s internal scoreboard/team system to show gl
 
 Easy integration with Gradle and Maven.
 
-### Important:
+## Important:
 This API is intended for beginner plugin developers to easily add colored glow effects.
 If you are an advanced user, we strongly recommend creating your own system that fits your scoreboard management.
 Currently, it uses the vanilla scoreboard system and not a packet-based system; a packet-based version is coming soon.
 
-###🛠️ Installation / Dependency
+## 🛠️ Installation / Dependency
 Maven (pom.xml)
 
 ```xml
@@ -160,9 +146,9 @@ Maven (pom.xml)
   </dependency>
 </dependencies>
 ```
-### Gradle (Groovy DSL)
+## Gradle (Groovy DSL)
 
-```xml
+```gradle
 repositories {
     mavenCentral()
     maven { url = uri("https://maven.pkg.github.com/NicoHaxz/PacketGlowAPI") }
@@ -172,9 +158,9 @@ dependencies {
     implementation("io.github.nicohaxz:packetglowapi:1.0.8")
 }
 ```
-### Gradle (Kotlin DSL)
+## Gradle (Kotlin DSL)
 
-```xml
+```gradle
 repositories {
     mavenCentral()
     maven { url = uri("https://maven.pkg.github.com/NicoHaxz/PacketGlowAPI") }
@@ -184,21 +170,7 @@ dependencies {
     implementation("io.github.nicohaxz:packetglowapi:1.0.8")
 }
 ```
-###🚀 Initialization
-In your main plugin class:
-
-```java
-@Override
-public void onEnable() {
-    GlowAPI.initialize();
-}
-
-@Override
-public void onDisable() {
-    GlowAPI.shutdown();
-}
-```
-###💡 Usage Examples
+## 💡 Usage Examples
 Make a player glow red for 10 seconds:
 
 ```java
@@ -220,7 +192,7 @@ public void onJoin(PlayerJoinEvent event) {
     GlowAPI.setCustomPlayerGlow(player, org.bukkit.ChatColor.GREEN, 600);
 }
 ```
-### 📦 Requirements
+## 📦 Requirements
 Spigot / Paper / Purpur 1.21.4+
 
 No ProtocolLib required
