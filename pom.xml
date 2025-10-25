@@ -8,11 +8,11 @@
 
     <groupId>io.github.nicohaxz</groupId>
     <artifactId>packetglowapi</artifactId>
-    <version>1.0.7</version>
+    <version>1.0.8</version>
     <packaging>jar</packaging>
 
     <name>PacketGlowAPI</name>
-    <description>API para aplicar efectos de glow personalizados con colores usando ProtocolLib en Minecraft 1.21.4.</description>
+    <description>API para aplicar efectos de glow personalizados con colores usando client side Minecraft 1.21.4.</description>
     <url>https://github.com/NicoHaxz/PacketGlowAPI</url>
 
     <properties>
