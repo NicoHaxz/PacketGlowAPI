@@ -39,7 +39,44 @@ Agrega esto en tu `pom.xml`:
   </dependency>
 </dependencies>
 ```
+# 📦 Agregar PacketGlowAPI con Gradle
 
+Puedes usar **PacketGlowAPI** tanto con **Maven** como con **Gradle**.  
+Aquí te explico cómo hacerlo para Gradle, usando los dos formatos más comunes: **Groovy DSL** (`build.gradle`) y **Kotlin DSL** (`build.gradle.kts`).
+
+---
+
+## 🧩 Usando Gradle (Groovy DSL)
+
+```gradle
+repositories {
+    mavenCentral()
+    maven {
+        url = uri("https://maven.pkg.github.com/NicoHaxz/PacketGlowAPI")
+    }
+}
+
+dependencies {
+    implementation("nico.dev:PacketGlowAPI:1.0.0")
+}
+```
+
+---
+
+## 🧠 Usando Gradle (Kotlin DSL)
+
+```kotlin
+repositories {
+    mavenCentral()
+    maven {
+        url = uri("https://maven.pkg.github.com/NicoHaxz/PacketGlowAPI")
+    }
+}
+
+dependencies {
+    implementation("nico.dev:PacketGlowAPI:1.0.0")
+}
+```
 
 ---
 
@@ -153,7 +190,33 @@ Add this to your `pom.xml`:
   </dependency>
 </dependencies>
 ```
+## 🧩 Gradle Dependency
 
+If you use **Gradle** instead of Maven, you can also import **PacketGlowAPI** directly from **GitHub Packages**, since it’s a Maven-compatible repository.
+
+Add this to your `build.gradle`:
+
+```groovy
+repositories {
+    maven { url "https://maven.pkg.github.com/NicoHaxz/PacketGlowAPI" }
+}
+
+dependencies {
+    implementation "nico.dev:PacketGlowAPI:1.0.0"
+}
+```
+
+Or if you’re using the **Kotlin DSL (`build.gradle.kts`)**:
+
+```kotlin
+repositories {
+    maven("https://maven.pkg.github.com/NicoHaxz/PacketGlowAPI")
+}
+
+dependencies {
+    implementation("nico.dev:PacketGlowAPI:1.0.0")
+}
+```
 
 ---
 
