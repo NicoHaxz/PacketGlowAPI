@@ -51,15 +51,13 @@ public class GlowManager {
     private void sendTeamPacket(Player viewer, TeamData team, int mode, Collection<String> players) {
         try {
             PacketContainer packet = new PacketContainer(PacketType.Play.Server.SCOREBOARD_TEAM);
-            packet.getStrings().write(0, team.name); // team name
-            packet.getStrings().write(1, team.name); // display name
-
+            packet.getStrings().write(0, team.name);
+            packet.getStrings().write(1, team.name);
             packet.getChatComponents().writeSafely(0, null);
             packet.getChatComponents().writeSafely(1, null);
-
-            packet.getIntegers().writeSafely(0, 0); // friendlyFlags (legacy)
-            packet.getIntegers().writeSafely(1, team.color.value); // color
-            packet.getIntegers().writeSafely(2, mode); // mode
+            packet.getIntegers().writeSafely(0, 0);
+            packet.getIntegers().writeSafely(1, team.color.value);
+            packet.getIntegers().writeSafely(2, mode);
 
             if (players == null) players = Collections.emptyList();
             packet.getSpecificModifier(Collection.class).write(0, new ArrayList<>(players));
@@ -70,17 +68,17 @@ public class GlowManager {
         }
     }
 
-
-    private void sendGlowingMetadata(Entity entity, Player viewer, boolean glowing) {
+    private void sendGlowingMetadata(Entity entity, Player viewer, GlowColor color, boolean glowing) {
         try {
             WrappedDataWatcher watcher = WrappedDataWatcher.getEntityWatcher(entity);
 
             WrappedDataWatcher.WrappedDataWatcherObject flags = watcher.getWatchableObject(0).getWatcherObject();
-
             byte original = watcher.getByte(flags.getIndex());
             byte newFlags = (byte) (glowing ? (original | 0x40) : (original & ~0x40));
-
             watcher.setObject(flags, newFlags);
+
+            WrappedDataWatcher.WrappedDataWatcherObject colorObj = watcher.getWatchableObject(1).getWatcherObject();
+            watcher.setObject(colorObj, (byte) color.value);
 
             PacketContainer packet = new PacketContainer(PacketType.Play.Server.ENTITY_METADATA);
             packet.getIntegers().write(0, entity.getEntityId());
@@ -105,14 +103,14 @@ public class GlowManager {
 
             for (Player v : target) {
                 sendTeamPacket(v, t, 0, Collections.singletonList(entry));
-                sendGlowingMetadata(entity, v, true);
+                sendGlowingMetadata(entity, v, color, true);
             }
         } else {
             for (Player v : target) {
                 for (TeamData t : teams.values()) {
                     sendTeamPacket(v, t, 4, Collections.singletonList(entry));
                 }
-                sendGlowingMetadata(entity, v, false);
+                sendGlowingMetadata(entity, v, color, false);
             }
         }
     }

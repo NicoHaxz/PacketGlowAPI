@@ -1,5 +1,5 @@
 name: PacketGlowAPI
-version: '1.0.3'
+version: '1.0.4'
 main: nico.dev.packetGlowAPI.main
 api-version: '1.21'
 authors: [Nicoswished]
